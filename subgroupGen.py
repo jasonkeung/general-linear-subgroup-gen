@@ -13,7 +13,7 @@ def invMod(num, mod):
         if (num * i) % mod == 1:
             return i
 
-    return -1 # this should never happen if mod is prime
+    return -1 # this should never happen if mod is prime and num is nonzero
 
 # matrix print function
 def printMat(mat):
