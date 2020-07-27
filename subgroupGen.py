@@ -33,24 +33,26 @@ stack = []
 subgroup = set()
 subgroup.add((1, 0, 0, 1)) # ensure identity element is in subgroup
 
-print('Enter a 2x2 matrix from left-right, top-down to generate its subgroup: ')
+print('Enter an invertible 2x2 matrix from left-right, top-down to generate its subgroup: ')
 
 tl = int(input('   Top  left: '))
 tr = int(input('  Top  right: '))
 bl = int(input('Bottom  left: '))
 br = int(input('Bottom right: '))
 
-stack.append((tl % mod, tr % mod, bl % mod, br % mod))
+if matDet([tl, tr, bl, br]) != 0:
+    stack.append((tl % mod, tr % mod, bl % mod, br % mod))
 
 
 while stack: # stack will hold elements to be processed
     a = stack.pop() # element to process
     
-    if a not in subgroup:
-        subgroup.add(a)
+    if matDet(a) != 0:
+    
+        if a not in subgroup:
+            subgroup.add(a)
 
-    # add inverse of a to stack if it exists:
-    if matDet(a) != 0: # check that det(a) is not 0
+        # add inverse of a to stack:
         detInv = invMod(matDet(a), mod) # 1/determinant in mod p
         matSwapNeg = (a[3], -a[1], -a[2], a[0]) # swap a and d, negate b and c
         matInv = (detInv * matSwapNeg[0] % mod, detInv * matSwapNeg[1] % mod, detInv * matSwapNeg[2] % mod, detInv * matSwapNeg[3] % mod) # distribute factor in
@@ -59,15 +61,15 @@ while stack: # stack will hold elements to be processed
 
 
 
-    # add a * b and b * a for every b already in subgroup
-    for b in subgroup:
-        prod1 = matMult(a, b, mod) # a * b
-        if prod1 not in stack and prod1 not in subgroup:
-            stack.append(prod1)
-        
-        prod2 = matMult(b, a, mod) # b * a
-        if prod2 not in stack and prod2 not in subgroup:
-            stack.append(prod2)
+        # add a * b and b * a for every b already in subgroup
+        for b in subgroup:
+            prod1 = matMult(a, b, mod) # a * b
+            if prod1 not in stack and prod1 not in subgroup:
+                stack.append(prod1)
+
+            prod2 = matMult(b, a, mod) # b * a
+            if prod2 not in stack and prod2 not in subgroup:
+                stack.append(prod2)
 
 print('Subgroup generated with ' + str(len(subgroup)) + ' elements:')
 for mat in subgroup:
