@@ -42,6 +42,8 @@ br = int(input('Bottom right: '))
 
 if matDet([tl, tr, bl, br]) != 0:
     stack.append((tl % mod, tr % mod, bl % mod, br % mod))
+else:
+    print('Error: This matrix is not invertible.')
 
 
 while stack: # stack will hold elements to be processed
